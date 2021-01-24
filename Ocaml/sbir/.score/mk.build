@@ -1,0 +1,8 @@
+#!/bin/bash
+# $Id: mk.build,v 1.1 2019-01-18 11:47:25-08 - - $
+# Checksource and do the build.
+
+export PATH=$PATH:/afs/cats.ucsc.edu/courses/cmps112-wm/bin/
+partnercheck 2>&1 | tee partnercheck.log
+checksource Makefile README* *.ml* >checksource.log 2>&1
+gmake >gmake.log 2>&1

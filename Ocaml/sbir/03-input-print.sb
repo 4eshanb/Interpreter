@@ -1,0 +1,7 @@
+# $Id: 03-input-print.sb,v 1.2 2019-01-18 11:56:49-08 - - $
+#
+# Simple input a variable then print
+
+        input x
+        print "x = ", x
+

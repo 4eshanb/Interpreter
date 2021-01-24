@@ -1,0 +1,23 @@
+let rcs = "(* $Id: using,v 1.3 2019-01-24 17:15:07-08 - - $ *)";;
+
+print_endline rcs;;
+
+#load "str.cma";;
+
+#mod_use "absyn.mli";;
+#mod_use "etc.ml";;
+
+#mod_use "parser.ml";;
+#mod_use "scanner.ml";;
+
+#mod_use "tables.ml";;
+#mod_use "dumper.ml";;
+
+#mod_use "interp.ml";;
+#mod_use "main.ml";;
+
+open Interp;;
+open Main;;
+
+want_dump := true;;
+

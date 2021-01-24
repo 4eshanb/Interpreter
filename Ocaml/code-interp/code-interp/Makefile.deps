@@ -1,0 +1,23 @@
+# Created Wed Feb 20 16:49:56 PST 2019
+absyn.cmi :
+etc.cmi :
+etc.cmo : etc.cmi
+etc.cmx : etc.cmi
+tables.cmi : absyn.cmi
+tables.cmo : absyn.cmi tables.cmi
+tables.cmx : absyn.cmi tables.cmi
+dumper.cmi : absyn.cmi
+dumper.cmo : absyn.cmi dumper.cmi
+dumper.cmx : absyn.cmi dumper.cmi
+interp.cmi : absyn.cmi
+interp.cmo : tables.cmi etc.cmi dumper.cmi absyn.cmi interp.cmi
+interp.cmx : tables.cmx etc.cmx dumper.cmx absyn.cmi interp.cmi
+main.cmo : scanner.cmo parser.cmi interp.cmi etc.cmi
+main.cmx : scanner.cmx parser.cmx interp.cmx etc.cmx
+dumper.cmi : absyn.cmi
+tables.cmi : absyn.cmi
+parser.cmi : absyn.cmi
+parser.cmo : etc.cmi absyn.cmi parser.cmi
+parser.cmx : etc.cmx absyn.cmi parser.cmi
+scanner.cmo : parser.cmi etc.cmi
+scanner.cmx : parser.cmx etc.cmx

@@ -1,0 +1,5 @@
+# $Id: 00-hello-world.sb,v 1.1 2019-01-18 11:47:25-08 - - $
+#
+# Classic Hello World program.
+#
+        print "Hello, World!"

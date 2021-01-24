@@ -1,0 +1,43 @@
+head	1.1;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.1
+date	2019.01.18.19.47.25;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.1
+log
+@-
+@
+text
+@# $Id: 30-input-pi.sb,v 1.1 2019-01-17 17:24:45-08 - - $
+#
+
+        let pi = 4 * atan(1)
+
+        print "RE: House Bill 246, Indiana State Legislature, 1897"
+        print "Enter 1 if it has passed and 0 if not."
+
+        input tennessee
+        if tennessee = 0 goto prt
+        let pi = 3 
+prt:    print "pi = ", pi
+
+# Print some random junk to exercise the interpreter.
+
+        print
+        print
+        print .333333333333333333333333333333333333333333
+        let avogadro = 6.02e23
+        print avogadro
+@

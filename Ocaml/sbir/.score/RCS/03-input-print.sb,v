@@ -1,0 +1,53 @@
+head	1.2;
+access;
+symbols;
+locks;
+comment	@# @;
+
+
+1.2
+date	2019.01.18.19.56.49;	author -;	state -;
+branches;
+next	1.1;
+
+1.1
+date	2019.01.18.19.47.25;	author -;	state -;
+branches;
+next	;
+
+
+desc
+@@
+
+
+1.2
+log
+@-
+@
+text
+@# $Id: 03-input-print.sb,v 1.1 2019-01-18 11:47:25-08 - - $
+#
+# Simple input a variable then print
+
+        input x
+        print "x = ", x
+
+@
+
+
+1.1
+log
+@-
+@
+text
+@d1 1
+a1 1
+# $Id: 03-input-print.sb,v 1.1 2019-01-17 17:24:45-08 - - $
+d3 1
+a3 1
+# Simple input variable then print
+d5 2
+a6 2
+        input variable
+        print "variable = ", variable
+@

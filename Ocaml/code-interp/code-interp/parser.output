@@ -1,0 +1,750 @@
+   0  $accept : %entry% $end
+
+   1  program : stmt_list EOF
+
+   2  stmt_list : stmt_list stmt EOL
+   3            | stmt_list error EOL
+   4            |
+
+   5  stmt : label action
+   6       | action
+   7       | label
+   8       |
+
+   9  label : IDENT COLON
+
+  10  action : DIM IDENT LSUB expr RSUB
+  11         | LET memref EQUAL expr
+  12         | GOTO IDENT
+  13         | IF relexpr GOTO IDENT
+  14         | PRINT print_list
+  15         | PRINT
+  16         | INPUT input_list
+
+  17  print_list : print COMMA print_list
+  18             | print
+
+  19  print : expr
+  20        | STRING
+
+  21  input_list : memref COMMA input_list
+  22             | memref
+
+  23  memref : IDENT
+  24         | IDENT LSUB expr RSUB
+
+  25  relexpr : expr RELOP expr
+  26          | expr EQUAL expr
+
+  27  expr : expr ADDOP term
+  28       | term
+
+  29  term : term MULOP factor
+  30       | factor
+
+  31  factor : primary POWOP factor
+  32         | primary
+
+  33  primary : LPAR expr RPAR
+  34          | ADDOP primary
+  35          | NUMBER
+  36          | memref
+  37          | IDENT LPAR expr RPAR
+
+  38  %entry% : '\001' program
+
+state 0
+	$accept : . %entry% $end  (0)
+
+	'\001'  shift 1
+	.  error
+
+	%entry%  goto 2
+
+
+state 1
+	%entry% : '\001' . program  (38)
+	stmt_list : .  (4)
+
+	.  reduce 4
+
+	program  goto 3
+	stmt_list  goto 4
+
+
+state 2
+	$accept : %entry% . $end  (0)
+
+	$end  accept
+
+
+state 3
+	%entry% : '\001' program .  (38)
+
+	.  reduce 38
+
+
+state 4
+	program : stmt_list . EOF  (1)
+	stmt_list : stmt_list . stmt EOL  (2)
+	stmt_list : stmt_list . error EOL  (3)
+	stmt : .  (8)
+
+	error  shift 5
+	IDENT  shift 6
+	EOF  shift 7
+	DIM  shift 8
+	LET  shift 9
+	GOTO  shift 10
+	IF  shift 11
+	PRINT  shift 12
+	INPUT  shift 13
+	EOL  reduce 8
+
+	stmt  goto 14
+	label  goto 15
+	action  goto 16
+
+
+state 5
+	stmt_list : stmt_list error . EOL  (3)
+
+	EOL  shift 17
+	.  error
+
+
+state 6
+	label : IDENT . COLON  (9)
+
+	COLON  shift 18
+	.  error
+
+
+state 7
+	program : stmt_list EOF .  (1)
+
+	.  reduce 1
+
+
+state 8
+	action : DIM . IDENT LSUB expr RSUB  (10)
+
+	IDENT  shift 19
+	.  error
+
+
+state 9
+	action : LET . memref EQUAL expr  (11)
+
+	IDENT  shift 20
+	.  error
+
+	memref  goto 21
+
+
+state 10
+	action : GOTO . IDENT  (12)
+
+	IDENT  shift 22
+	.  error
+
+
+state 11
+	action : IF . relexpr GOTO IDENT  (13)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	expr  goto 27
+	memref  goto 28
+	relexpr  goto 29
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 12
+	action : PRINT . print_list  (14)
+	action : PRINT .  (15)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	STRING  shift 33
+	LPAR  shift 26
+	EOL  reduce 15
+
+	expr  goto 34
+	memref  goto 28
+	print_list  goto 35
+	print  goto 36
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 13
+	action : INPUT . input_list  (16)
+
+	IDENT  shift 20
+	.  error
+
+	memref  goto 37
+	input_list  goto 38
+
+
+state 14
+	stmt_list : stmt_list stmt . EOL  (2)
+
+	EOL  shift 39
+	.  error
+
+
+state 15
+	stmt : label . action  (5)
+	stmt : label .  (7)
+
+	DIM  shift 8
+	LET  shift 9
+	GOTO  shift 10
+	IF  shift 11
+	PRINT  shift 12
+	INPUT  shift 13
+	EOL  reduce 7
+
+	action  goto 40
+
+
+state 16
+	stmt : action .  (6)
+
+	.  reduce 6
+
+
+state 17
+	stmt_list : stmt_list error EOL .  (3)
+
+	.  reduce 3
+
+
+state 18
+	label : IDENT COLON .  (9)
+
+	.  reduce 9
+
+
+state 19
+	action : DIM IDENT . LSUB expr RSUB  (10)
+
+	LSUB  shift 41
+	.  error
+
+
+state 20
+	memref : IDENT .  (23)
+	memref : IDENT . LSUB expr RSUB  (24)
+
+	LSUB  shift 42
+	EQUAL  reduce 23
+	COMMA  reduce 23
+	EOL  reduce 23
+
+
+state 21
+	action : LET memref . EQUAL expr  (11)
+
+	EQUAL  shift 43
+	.  error
+
+
+state 22
+	action : GOTO IDENT .  (12)
+
+	.  reduce 12
+
+
+state 23
+	primary : ADDOP . primary  (34)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	memref  goto 28
+	primary  goto 44
+
+
+state 24
+	memref : IDENT .  (23)
+	memref : IDENT . LSUB expr RSUB  (24)
+	primary : IDENT . LPAR expr RPAR  (37)
+
+	LPAR  shift 45
+	LSUB  shift 42
+	RELOP  reduce 23
+	EQUAL  reduce 23
+	ADDOP  reduce 23
+	MULOP  reduce 23
+	POWOP  reduce 23
+	COMMA  reduce 23
+	RPAR  reduce 23
+	RSUB  reduce 23
+	EOL  reduce 23
+	GOTO  reduce 23
+
+
+state 25
+	primary : NUMBER .  (35)
+
+	.  reduce 35
+
+
+state 26
+	primary : LPAR . expr RPAR  (33)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	expr  goto 46
+	memref  goto 28
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 27
+	relexpr : expr . RELOP expr  (25)
+	relexpr : expr . EQUAL expr  (26)
+	expr : expr . ADDOP term  (27)
+
+	RELOP  shift 47
+	EQUAL  shift 48
+	ADDOP  shift 49
+	.  error
+
+
+state 28
+	primary : memref .  (36)
+
+	.  reduce 36
+
+
+state 29
+	action : IF relexpr . GOTO IDENT  (13)
+
+	GOTO  shift 50
+	.  error
+
+
+state 30
+	expr : term .  (28)
+	term : term . MULOP factor  (29)
+
+	MULOP  shift 51
+	RELOP  reduce 28
+	EQUAL  reduce 28
+	ADDOP  reduce 28
+	COMMA  reduce 28
+	RPAR  reduce 28
+	RSUB  reduce 28
+	EOL  reduce 28
+	GOTO  reduce 28
+
+
+state 31
+	term : factor .  (30)
+
+	.  reduce 30
+
+
+state 32
+	factor : primary . POWOP factor  (31)
+	factor : primary .  (32)
+
+	POWOP  shift 52
+	RELOP  reduce 32
+	EQUAL  reduce 32
+	ADDOP  reduce 32
+	MULOP  reduce 32
+	COMMA  reduce 32
+	RPAR  reduce 32
+	RSUB  reduce 32
+	EOL  reduce 32
+	GOTO  reduce 32
+
+
+state 33
+	print : STRING .  (20)
+
+	.  reduce 20
+
+
+state 34
+	print : expr .  (19)
+	expr : expr . ADDOP term  (27)
+
+	ADDOP  shift 49
+	COMMA  reduce 19
+	EOL  reduce 19
+
+
+state 35
+	action : PRINT print_list .  (14)
+
+	.  reduce 14
+
+
+state 36
+	print_list : print . COMMA print_list  (17)
+	print_list : print .  (18)
+
+	COMMA  shift 53
+	EOL  reduce 18
+
+
+state 37
+	input_list : memref . COMMA input_list  (21)
+	input_list : memref .  (22)
+
+	COMMA  shift 54
+	EOL  reduce 22
+
+
+state 38
+	action : INPUT input_list .  (16)
+
+	.  reduce 16
+
+
+state 39
+	stmt_list : stmt_list stmt EOL .  (2)
+
+	.  reduce 2
+
+
+state 40
+	stmt : label action .  (5)
+
+	.  reduce 5
+
+
+state 41
+	action : DIM IDENT LSUB . expr RSUB  (10)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	expr  goto 55
+	memref  goto 28
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 42
+	memref : IDENT LSUB . expr RSUB  (24)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	expr  goto 56
+	memref  goto 28
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 43
+	action : LET memref EQUAL . expr  (11)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	expr  goto 57
+	memref  goto 28
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 44
+	primary : ADDOP primary .  (34)
+
+	.  reduce 34
+
+
+state 45
+	primary : IDENT LPAR . expr RPAR  (37)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	expr  goto 58
+	memref  goto 28
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 46
+	expr : expr . ADDOP term  (27)
+	primary : LPAR expr . RPAR  (33)
+
+	ADDOP  shift 49
+	RPAR  shift 59
+	.  error
+
+
+state 47
+	relexpr : expr RELOP . expr  (25)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	expr  goto 60
+	memref  goto 28
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 48
+	relexpr : expr EQUAL . expr  (26)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	expr  goto 61
+	memref  goto 28
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 49
+	expr : expr ADDOP . term  (27)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	memref  goto 28
+	term  goto 62
+	factor  goto 31
+	primary  goto 32
+
+
+state 50
+	action : IF relexpr GOTO . IDENT  (13)
+
+	IDENT  shift 63
+	.  error
+
+
+state 51
+	term : term MULOP . factor  (29)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	memref  goto 28
+	factor  goto 64
+	primary  goto 32
+
+
+state 52
+	factor : primary POWOP . factor  (31)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	LPAR  shift 26
+	.  error
+
+	memref  goto 28
+	factor  goto 65
+	primary  goto 32
+
+
+state 53
+	print_list : print COMMA . print_list  (17)
+
+	ADDOP  shift 23
+	IDENT  shift 24
+	NUMBER  shift 25
+	STRING  shift 33
+	LPAR  shift 26
+	.  error
+
+	expr  goto 34
+	memref  goto 28
+	print_list  goto 66
+	print  goto 36
+	term  goto 30
+	factor  goto 31
+	primary  goto 32
+
+
+state 54
+	input_list : memref COMMA . input_list  (21)
+
+	IDENT  shift 20
+	.  error
+
+	memref  goto 37
+	input_list  goto 67
+
+
+state 55
+	action : DIM IDENT LSUB expr . RSUB  (10)
+	expr : expr . ADDOP term  (27)
+
+	ADDOP  shift 49
+	RSUB  shift 68
+	.  error
+
+
+state 56
+	memref : IDENT LSUB expr . RSUB  (24)
+	expr : expr . ADDOP term  (27)
+
+	ADDOP  shift 49
+	RSUB  shift 69
+	.  error
+
+
+state 57
+	action : LET memref EQUAL expr .  (11)
+	expr : expr . ADDOP term  (27)
+
+	ADDOP  shift 49
+	EOL  reduce 11
+
+
+state 58
+	expr : expr . ADDOP term  (27)
+	primary : IDENT LPAR expr . RPAR  (37)
+
+	ADDOP  shift 49
+	RPAR  shift 70
+	.  error
+
+
+state 59
+	primary : LPAR expr RPAR .  (33)
+
+	.  reduce 33
+
+
+state 60
+	relexpr : expr RELOP expr .  (25)
+	expr : expr . ADDOP term  (27)
+
+	ADDOP  shift 49
+	GOTO  reduce 25
+
+
+state 61
+	relexpr : expr EQUAL expr .  (26)
+	expr : expr . ADDOP term  (27)
+
+	ADDOP  shift 49
+	GOTO  reduce 26
+
+
+state 62
+	expr : expr ADDOP term .  (27)
+	term : term . MULOP factor  (29)
+
+	MULOP  shift 51
+	RELOP  reduce 27
+	EQUAL  reduce 27
+	ADDOP  reduce 27
+	COMMA  reduce 27
+	RPAR  reduce 27
+	RSUB  reduce 27
+	EOL  reduce 27
+	GOTO  reduce 27
+
+
+state 63
+	action : IF relexpr GOTO IDENT .  (13)
+
+	.  reduce 13
+
+
+state 64
+	term : term MULOP factor .  (29)
+
+	.  reduce 29
+
+
+state 65
+	factor : primary POWOP factor .  (31)
+
+	.  reduce 31
+
+
+state 66
+	print_list : print COMMA print_list .  (17)
+
+	.  reduce 17
+
+
+state 67
+	input_list : memref COMMA input_list .  (21)
+
+	.  reduce 21
+
+
+state 68
+	action : DIM IDENT LSUB expr RSUB .  (10)
+
+	.  reduce 10
+
+
+state 69
+	memref : IDENT LSUB expr RSUB .  (24)
+
+	.  reduce 24
+
+
+state 70
+	primary : IDENT LPAR expr RPAR .  (37)
+
+	.  reduce 37
+
+
+25 terminals, 16 nonterminals
+39 grammar rules, 71 states
